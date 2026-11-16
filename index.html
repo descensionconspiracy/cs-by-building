@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Computer Science by Building</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: a circuit-board spine running down the page; the build ladder from NAND upward, then maths wires into each rung, then how learning works */
 :root{
@@ -115,7 +115,46 @@ details.subj summary h3::before{content:"▸ ";color:var(--trace)}details.subj[o
 .frame{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px}
 .frame .q{font-family:var(--display);font-size:1.05rem}
 .grid{display:grid;gap:10px}
-</style></head>
+</style><style>
+/* Reading comfort: defaults for everyone, plus the reader panel (data-* on <html>) */
+html{font-size:calc(106.25% * var(--scale,1))}
+body{font-size:1rem;line-height:1.6;text-align:left;word-spacing:.04em}
+p,li,.lede,.seen,.door,.xp,.cap{max-width:65ch}
+p+p{margin-top:.9em}
+.cap,.chain,.predict,.quest,.seen,.xp,.door,.pair,.p,.dh,.wild a,footer,.see,.legend,.qrow{font-size:max(.875rem,1em)}
+.cap,.chain,.predict,.quest,.seen,.xp,.door,.p{font-size:.9rem}
+.credit,.small,.n,.tag,.chip,.kind,th,.proj,.qrow code{font-size:.8rem}
+.lede[style]{font-size:.95rem!important}
+em,i{font-style:normal;font-weight:700}
+:root{--bg:#f5f3ec;--fg:#1d2420}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141916;--fg:#dfe6e1}}
+:root[data-theme="dark"]{--bg:#141916;--fg:#dfe6e1}
+/* panel choices */
+:root[data-space="wide"] body{letter-spacing:.035em;word-spacing:.16em;line-height:1.9}
+:root[data-space="wide"] p+p{margin-top:1.3em}
+:root[data-font="lexend"]{--body:"Lexend",system-ui,sans-serif;--display:"Lexend",system-ui,sans-serif}
+:root[data-font="verdana"]{--body:Verdana,"DejaVu Sans",sans-serif;--display:Verdana,"DejaVu Sans",sans-serif}
+:root[data-tint="cream"]{--bg:#f7efd8;--surface:#fdf8ea}
+:root[data-tint="blue"]{--bg:#e3edf6;--surface:#f2f7fb}
+:root[data-tint="green"]{--bg:#e4f1e2;--surface:#f3faf2}
+:root[data-tint]:not([data-tint="none"]){--fg:#1d2420;--muted:#4c5751;color-scheme:light}
+:root[data-motion="off"] *,:root[data-motion="off"] *::before{animation:none!important;transition:none!important}
+:root[data-motion="off"] .reveal,:root[data-motion="off"] .chain li,:root[data-motion="off"] .hero .node{opacity:1!important;transform:none!important}
+:root[data-motion="off"] .hero .wire{stroke-dashoffset:0!important}:root[data-motion="off"] .hero .pulse{display:none}
+#rc-btn{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:16px;z-index:50;font:700 .95rem var(--body);padding:10px 14px;border-radius:99px;border:2px solid var(--trace);background:var(--surface);color:var(--trace);cursor:pointer;box-shadow:0 2px 10px #0003}
+#rc{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:68px;z-index:50;width:min(320px,calc(100vw - 32px));background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;box-shadow:0 6px 24px #0004;font-size:.95rem;letter-spacing:normal;word-spacing:normal;line-height:1.4}
+#rc[hidden]{display:none}
+#rc h2{font:700 1.05rem var(--body)}
+#rc .row{display:grid;gap:6px}#rc .row>b{font-size:.85rem;color:var(--muted)}
+#rc .opts{display:flex;flex-wrap:wrap;gap:6px}
+#rc button{font:600 .85rem var(--body);padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;min-height:36px}
+#rc button[aria-pressed="true"]{background:var(--trace);border-color:var(--trace);color:var(--surface)}
+#rc button:focus-visible,#rc-btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+#rc-ruler{position:fixed;left:0;right:0;height:2.4em;pointer-events:none;z-index:40;background:color-mix(in srgb,var(--amber) 14%,transparent);border-block:1px solid color-mix(in srgb,var(--amber) 45%,transparent);display:none}
+:root[data-ruler="on"] #rc-ruler{display:block}
+</style>
+<script>(()=>{const d=document.documentElement;try{const s=JSON.parse(localStorage.getItem('rc')||'{}');for(const k in s)d.dataset[k]=s[k];if(s.scale)d.style.setProperty('--scale',s.scale)}catch(e){}})()</script>
+</head>
 <body>
 <div class="wrap">
   <header>
@@ -394,7 +433,7 @@ function scene3(host){const h=+host.dataset.h,w=host.clientWidth||600;let R;try{
   <footer>A plan, not a transcript: a self-paced track built alongside our own hub, where the learning and the software share one home.</footer>
 </div>
 <script>
-(()=>{const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+(()=>{const reduce=document.documentElement.dataset.motion==='off'||(document.documentElement.dataset.motion!=='on'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
  const groups=[['section > h2, section > p, section > .tag'],['.wild'],['.frame'],['details.subj'],['.shape'],['.scroll'],['.rung']];
  const els=[];groups.forEach(([q])=>document.querySelectorAll(q).forEach((e,i)=>{e.classList.add('reveal');e.style.setProperty('--i',i%6);els.push(e)}));
  const auto={'t-mine':()=>document.getElementById('t-mine').build(),'t-shazam':()=>document.getElementById('t-shazam').build(),'t-filter':()=>document.getElementById('t-filter').build(),'t-bird':()=>document.getElementById('t-bird').build(),'t-quake':()=>document.getElementById('t-quake').build(),'t-dh':()=>document.getElementById('t-dh').build(),'ex-merge':()=>{const b=document.querySelector('#ex-merge [data-a=step]');let n=0;const t=setInterval(()=>{b.click();if(++n>=6)clearInterval(t)},900)},
@@ -436,5 +475,28 @@ const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim
  draw();cap.textContent='Green is home, amber is where you are going. Draw walls by dragging, then find the route.'}
 })();
 </script>
+<button id="rc-btn" aria-expanded="false" aria-controls="rc">Aa Reading</button>
+<div id="rc" role="dialog" aria-label="Reading comfort" hidden>
+<h2>Reading comfort</h2>
+<div class="row"><b>Text size</b><div class="opts"><button data-size="-1" aria-label="Smaller text">A−</button><button data-size="0">Reset</button><button data-size="1" aria-label="Larger text">A+</button></div></div>
+<div class="row"><b>Spacing</b><div class="opts" data-k="space"><button data-v="normal">Normal</button><button data-v="wide">Wide</button></div></div>
+<div class="row"><b>Font</b><div class="opts" data-k="font"><button data-v="default">Atkinson</button><button data-v="lexend">Lexend</button><button data-v="verdana">Verdana</button></div></div>
+<div class="row"><b>Tint</b><div class="opts" data-k="tint"><button data-v="none">None</button><button data-v="cream">Cream</button><button data-v="blue">Blue</button><button data-v="green">Green</button></div></div>
+<div class="row"><b>Motion</b><div class="opts" data-k="motion"><button data-v="on">On</button><button data-v="off">Off</button></div></div>
+<div class="row"><b>Reading ruler</b><div class="opts" data-k="ruler"><button data-v="off">Off</button><button data-v="on">On</button></div></div>
+</div>
+<div id="rc-ruler" aria-hidden="true"></div>
+<script>(()=>{const d=document.documentElement,btn=document.getElementById('rc-btn'),p=document.getElementById('rc'),rl=document.getElementById('rc-ruler');
+const def={space:'normal',font:'default',tint:'none',motion:matchMedia('(prefers-reduced-motion: reduce)').matches?'off':'on',ruler:'off'};
+let s={};try{s=JSON.parse(localStorage.getItem('rc')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('rc',JSON.stringify(s))}catch(e){}};
+const sync=()=>{p.querySelectorAll('[data-k]').forEach(g=>{const v=s[g.dataset.k]||def[g.dataset.k];g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v))})};
+btn.onclick=()=>{p.hidden=!p.hidden;btn.setAttribute('aria-expanded',!p.hidden)};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!p.hidden){p.hidden=true;btn.setAttribute('aria-expanded',false);btn.focus()}});
+p.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.size!==undefined){const n=+b.dataset.size;let sc=n?Math.min(1.6,Math.max(.85,(+s.scale||1)+n*.1)):1;s.scale=String(Math.round(sc*100)/100);d.style.setProperty('--scale',s.scale);save();return}
+ const k=b.parentNode.dataset.k,v=b.dataset.v;s[k]=v;d.dataset[k]=v;save();sync();if(k==='motion')location.reload()});
+const mv=y=>{rl.style.top=(y-rl.offsetHeight/2)+'px'};addEventListener('pointermove',e=>mv(e.clientY),{passive:true});addEventListener('touchmove',e=>mv(e.touches[0].clientY),{passive:true});
+sync()})()</script>
 </body>
 </html>
